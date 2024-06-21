@@ -3,11 +3,13 @@
 import { ChevronRightIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { useSwipeable } from "react-swipeable";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 export default function Home() {
     var screen;
-    const [paginaAtiva, setPaginaAtiva] = useState("calculadora"); //home ou calculadora
+    const [paginaAtiva, setPaginaAtiva] = useState("home"); //home ou calculadora
     const [paginaAtivaCalculadora, setPaginaAtivaCalculadora] = useState("inputs"); //inputs ou calculos
     const [paginaAtivaCalculos, setPaginaAtivaCalculos] = useState(5); //5y, 10y ou 15y
 
@@ -32,37 +34,55 @@ export default function Home() {
     function handleIndiceDeCorrecao({ currentTarget }) {
         setIndiceDeCorrecao(currentTarget.value);
     }
-    const handlersSwipeable = useSwipeable({
-        onSwiped: (eventData) => {
-            if (eventData.dir === "Left") {
-                if (paginaAtivaCalculos > 5) {
-                    setPaginaAtivaCalculos(paginaAtivaCalculos - 5);
-                }
-            }
-            if (eventData.dir === "Right") {
-                if (paginaAtivaCalculos < 15) {
-                    setPaginaAtivaCalculos(paginaAtivaCalculos + 5);
-                }
-            }
-        },
-    });
+    var settings = {
+        dots: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+        lazyLoad: true,
+
+        customPaging: (i) => (
+            <div
+                className="custom-paging"
+                style={{
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "10px",
+                    color: "transparent",
+                    backgroundColor: "#EEE",
+                }}
+            >
+                {i}
+            </div>
+        ),
+    };
 
     if (paginaAtiva === "home") {
         screen = (
             <div class="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
                 <div>
-                    <div className="text-6xl text-white rotate-90 w-14">$</div>
-                </div>
-                <div>
-                    <h1 className="text-4xl mb-5 text-white">Esse financiamento é para mim?</h1>
-                    <div className="flex">
-                        <h3 className="text-2xl text-white">Veja a situação atual de pessoas que fizeram o mesmo financiamento que o seu, há 5, 10 e 15 anos atrás</h3>
-                        <button className="border rounded-full border-white-100/50 my-14" onClick={() => setPaginaAtiva("calculadora")}>
-                            <ChevronRightIcon className="size-20 text-white/50" />
-                        </button>
+                    <div className="text-6xl text-white rotate-90 w-14 font-semibold">
+                        <span>$</span>
                     </div>
                 </div>
-                <span className="text-2xl text-green-600 text-center">Acesse o simulador</span>
+                <div className="flex flex-col mb-20">
+                    <h1 className="text-4xl mb-5 text-white">Esse financiamento é para mim?</h1>
+                    <div className="flex">
+                        <h3 className="text-xl font-light text-white tracking-tighter flex-none w-56">
+                            Veja a situação atual de pessoas que fizeram o mesmo financiamento que o seu, há 5, 10 e 15 anos atrás
+                        </h3>
+                        <div className="flex justify-center w-40">
+                            <button className="border-4 rounded-full border-white/30 h-16 w-16" onClick={() => setPaginaAtiva("calculadora")}>
+                                <ChevronRightIcon className="size-14 text-white/30" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <span className="text-lg font-medium text-green-600 text-center" onClick={() => setPaginaAtiva("calculadora")}>
+                    Acesse o simulador
+                </span>
             </div>
         );
     }
@@ -70,16 +90,18 @@ export default function Home() {
         screen = (
             <div class="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
                 <div>
-                    <div className="text-6xl text-white rotate-90 w-14">$</div>
+                    <div className="text-6xl text-white rotate-90 w-14 font-semibold">
+                        <span onClick={() => setPaginaAtiva("home")}>$</span>
+                    </div>
                 </div>
                 <div className="flex flex-col ">
                     {paginaAtivaCalculadora === "inputs" ? (
-                        <div className="flex flex-col ">
+                        <div className="flex flex-col mb-14">
                             <h1 className="text-4xl mb-5 text-white">Financiamento</h1>
                             <input
-                                placeholder="Numero de parcelas"
+                                placeholder="Número de parcelas"
                                 id="inputNumeroParcelas"
-                                className="border p-1 my-2 rounded-lg"
+                                className="border p-1 my-2 rounded-lg text-base font-normal"
                                 type="number"
                                 value={numeroParcelas}
                                 onChange={handleNumeroParcelasChange}
@@ -89,7 +111,7 @@ export default function Home() {
                             <input
                                 placeholder="Valor da primeira parcela"
                                 id="inputValorPrimeiraParcela"
-                                className="border p-1 my-2 rounded-lg"
+                                className="border p-1 my-2 rounded-lg text-base font-normal"
                                 type="number"
                                 value={valorPrimeiraParcela}
                                 onChange={handleValorPrimeiraParcelaChange}
@@ -99,21 +121,31 @@ export default function Home() {
                             <input
                                 placeholder="Taxa de juros mensal"
                                 id="inputTaxaDeJurosMensal"
-                                className="border p-1 my-2 rounded-lg"
+                                className="border p-1 my-2 rounded-lg text-base font-normal"
                                 type="number"
                                 value={taxaDeJurosMensal}
                                 onChange={handleTaxaDeJurosMensal}
                                 min={0}
                                 max={0.1}
                             />
-                            <select id="inputSistemaDeFinanciamento" className="border p-1 my-2 rounded-lg" value={sistemaDeFinanciamento} onChange={handleSistemaDeFinanciamento}>
+                            <select
+                                id="inputSistemaDeFinanciamento"
+                                className="border p-1 my-2 rounded-lg text-base font-normal"
+                                value={sistemaDeFinanciamento}
+                                onChange={handleSistemaDeFinanciamento}
+                            >
                                 <option value={""} disabled selected>
                                     Sistema de financiamento
                                 </option>
                                 <option value={"price"}>PRICE</option>
                                 <option value={"sac"}>SAC</option>
                             </select>
-                            <select id="inputIndiceDeCorrecao" className="border p-1 my-2 rounded-lg" value={indiceDeCorrecao} onChange={handleIndiceDeCorrecao}>
+                            <select
+                                id="inputIndiceDeCorrecao"
+                                className="border p-1 my-2 rounded-lg text-base font-normal"
+                                value={indiceDeCorrecao}
+                                onChange={handleIndiceDeCorrecao}
+                            >
                                 <option value={""} disabled selected>
                                     Índice de correção
                                 </option>
@@ -124,70 +156,70 @@ export default function Home() {
                         </div>
                     ) : (
                         <div className="flex flex-col ">
-                            <h1 className="text-4xl mb-5 text-white">Resultado</h1>
-                            <h3 className="text-1xl mb-2 text-white/50">
+                            <h1 className="text-4xl mb-2 text-white justify-center">Resultado</h1>
+                            <h3 className="text-lg font-light text-white/80">
                                 Valor financiado: R$ <span>X,XX</span>
                             </h3>
-                            <h3 className="text-1xl mb-2 text-white/50">
+                            <h3 className="text-lg font-light mb-2 text-white/80">
                                 Valor da 1ª parcela: R$ <span>X,XX</span>
                             </h3>
-                            {paginaAtivaCalculos === 5 ? (
-                                <div className="bg-black/30" {...handlersSwipeable}>
-                                    <h2 className="text-2xl mb-2 text-white">Depois de 5 anos</h2>
-                                    <p className="text-1xl mb-2 text-white">Quem financiou nessas condições há 5 anos atrás,</p>
-
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Já pagou um total de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Hoje paga uma parcela de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        O valor para quitar hoje é de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <div id="div-dots-secundaria"></div>
+                            <Slider {...settings}>
+                                <div className="bg-black/30 flex flex-col p-6">
+                                    <h2 className="text-2xl text-white my-2">Depois de 5 anos</h2>
+                                    <p className="text-lg  text-white font-light my-4">Quem financiou nessas condições há 5 anos atrás,</p>
+                                    <div className="flex flex-row">
+                                        <div className="flex flex-col justify-between basis-3/4">
+                                            <h3 className="text-base my-2 text-white font-light h-10">Já pagou um total de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">Hoje paga uma parcela de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
+                                        </div>
+                                        <div className="flex flex-col text-right  justify-between basis-1/4">
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            ) : paginaAtivaCalculos === 10 ? (
-                                <div className="bg-black/30" {...handlersSwipeable}>
-                                    <h2 className="text-2xl mb-2 text-white">Depois de 10 anos</h2>
-                                    <p className="text-1xl mb-2 text-white">Quem financiou nessas condições há 10 anos atrás,</p>
-
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Já pagou um total de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Hoje paga uma parcela de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        O valor para quitar hoje é de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <div id="div-dots-secundaria"></div>
+                                <div className="bg-black/30 flex flex-col p-6">
+                                    <h2 className="text-2xl text-white my-2">Depois de 10 anos</h2>
+                                    <p className="text-lg  text-white font-light my-4">Quem financiou nessas condições há 10 anos atrás,</p>
+                                    <div className="flex flex-row">
+                                        <div className="flex flex-col justify-between basis-3/4">
+                                            <h3 className="text-base my-2 text-white font-light h-10">Já pagou um total de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">Hoje paga uma parcela de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
+                                        </div>
+                                        <div className="flex flex-col text-right  justify-between basis-1/4">
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            ) : (
-                                <div className="bg-black/30" {...handlersSwipeable}>
-                                    <h2 className="text-2xl mb-2 text-white">Depois de 15 anos</h2>
-                                    <p className="text-1xl mb-2 text-white">Quem financiou nessas condições há 15 anos atrás,</p>
-
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Já pagou um total de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        Hoje paga uma parcela de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <h3 className="text-1xl mb-2 text-white">
-                                        O valor para quitar hoje é de: <span className="text-red-500">R$ X,XX</span>
-                                    </h3>
-                                    <div id="div-dots-secundaria"></div>
-                                </div>
-                            )}
+                                <div className="bg-black/30 flex flex-col p-6">
+                                    <h2 className="text-2xl text-white my-2">Depois de 15 anos</h2>
+                                    <p className="text-lg  text-white font-light my-4">Quem financiou nessas condições há 15 anos atrás,</p>
+                                    <div className="flex flex-row">
+                                        <div className="flex flex-col justify-between basis-3/4">
+                                            <h3 className="text-base my-2 text-white font-light h-10">Já pagou um total de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">Hoje paga uma parcela de:</h3>
+                                            <h3 className="text-base my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
+                                        </div>
+                                        <div className="flex flex-col text-right  justify-between basis-1/4">
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">R$ X,XX</span>
+                                        </div>
+                                    </div>
+                                </div>{" "}
+                            </Slider>
                         </div>
                     )}
-                    <div id="div-dots-principal"></div>
                     <button
-                        className="border rounded-full border-white-100/50 my-14"
+                        className="border-4 rounded-full border-green-700 my-14 w-16 h-16 mx-auto"
                         onClick={() => (paginaAtivaCalculadora === "calculos" ? setPaginaAtivaCalculadora("inputs") : setPaginaAtivaCalculadora("calculos"))}
                     >
-                        {paginaAtivaCalculadora === "calculos" ? <ChevronLeftIcon className="size-20 text-white/50" /> : <ChevronRightIcon className="size-20 text-white/50" />}
+                        {paginaAtivaCalculadora === "calculos" ? <ChevronLeftIcon className="size-18 text-green-700 " /> : <ChevronRightIcon className="size-18 text-green-700" />}
                     </button>
                 </div>
             </div>
