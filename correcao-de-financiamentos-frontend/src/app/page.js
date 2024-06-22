@@ -58,7 +58,6 @@ export default function Home() {
             valorPrimeiraParcela: valorPrimeiraParcela,
             indiceCorrecao: indiceDeCorrecao,
         };
-        console.log(reqData);
         try {
             // const response = await fetch("http://localhost:3001/processa-dados-financiamento", {
             //     method: "POST",
@@ -117,7 +116,7 @@ export default function Home() {
 
     if (paginaAtiva === "home") {
         screen = (
-            <div class="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
+            <div className="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
                 <div>
                     <div className="text-6xl text-white rotate-90 w-14 font-semibold">
                         <span>$</span>
@@ -144,7 +143,7 @@ export default function Home() {
     }
     if (paginaAtiva === "calculadora") {
         screen = (
-            <div class="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
+            <div className="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex flex-col justify-between ">
                 <div>
                     <div className="text-6xl text-white rotate-90 w-14 font-semibold">
                         <span
