@@ -61,7 +61,6 @@ export default function Home() {
         console.log(reqData);
         try {
             // const response = await fetch("http://localhost:3001/processa-dados-financiamento", {
-            //     // Substitua '/api/calcular' pela URL da sua API
             //     method: "POST",
             //     headers: {
             //         "Content-Type": "application/json",
@@ -69,7 +68,6 @@ export default function Home() {
             //     body: JSON.stringify(reqData),
             // });
             const response = await fetch("https://correcao-de-financiamentos-backend.onrender.com/processa-dados-financiamento", {
-                // Substitua '/api/calcular' pela URL da sua API
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -258,13 +256,33 @@ export default function Home() {
                                             <h3 className="text-sm my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}
-                                            </span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}</span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}
-                                            </span>
+                                            {resultadosCalculo.valorPagoCincoAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.parcelaCincoAnosAtras > valorPrimeiraParcela ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.saldoDevedorCincoAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -278,11 +296,33 @@ export default function Home() {
                                             <h3 className="text-sm my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}</span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}</span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}
-                                            </span>
+                                            {resultadosCalculo.valorPagoDezAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.parcelaDezAnosAtras > valorPrimeiraParcela ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.saldoDevedorDezAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -296,15 +336,33 @@ export default function Home() {
                                             <h3 className="text-sm my-2 text-white font-light h-10">O valor para quitar hoje é:</h3>
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}
-                                            </span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}
-                                            </span>
-                                            <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                {formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}
-                                            </span>
+                                            {resultadosCalculo.valorPagoQuinzeAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.parcelaQuinzeAnosAtras > valorPrimeiraParcela ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}
+                                                </span>
+                                            )}
+                                            {resultadosCalculo.saldoDevedorQuinzeAnosAtras > resultadosCalculo.valorFinanciado ? (
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}
+                                                </span>
+                                            ) : (
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
+                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
