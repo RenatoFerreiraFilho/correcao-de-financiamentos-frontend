@@ -7,10 +7,11 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import InputMask from "react-input-mask";
+import { TailSpin } from "react-loading-icons";
 
 export default function Home() {
     var screen;
-    const [paginaAtiva, setPaginaAtiva] = useState("home"); //home ou calculadora
+    const [paginaAtiva, setPaginaAtiva] = useState("home"); //home ou calculadora ou aguardando
     const [paginaAtivaCalculadora, setPaginaAtivaCalculadora] = useState("inputs"); //inputs ou calculos
 
     const [numeroParcelas, setNumeroParcelas] = useState("");
@@ -50,6 +51,7 @@ export default function Home() {
     }
     async function handleFormSubmit(e) {
         e.preventDefault();
+        setPaginaAtiva("aguardando");
         const reqData = {
             tipoTaxaDeJuros: "mensal",
             taxaDeJuros: valorFloatTaxaDeJuros,
@@ -77,6 +79,7 @@ export default function Home() {
             if (response.ok) {
                 const data = await response.json();
                 setResultadosCalculo(data); // Atualiza o estado com os resultados
+                setPaginaAtiva("calculadora");
                 setPaginaAtivaCalculadora("calculos"); // Muda para a tela de resultados
             } else {
                 // Lidar com erros da API
@@ -212,13 +215,7 @@ export default function Home() {
                                     <option value={"price"}>PRICE</option>
                                     <option value={"sac"}>SAC</option>
                                 </select>
-                                <select
-                                    required
-                                    id="inputIndiceDeCorrecao"
-                                    className="border p-1 my-2 rounded-lg text-base font-normal"
-                                    value={indiceDeCorrecao}
-                                    onChange={handleIndiceDeCorrecao}
-                                >
+                                <select required id="inputIndiceDeCorrecao" className="border p-1 my-2 rounded-lg text-base font-normal" value={indiceDeCorrecao} onChange={handleIndiceDeCorrecao}>
                                     <option value={""} disabled selected>
                                         Índice de correção
                                     </option>
@@ -227,11 +224,7 @@ export default function Home() {
                                     <option value={"incc"}>INCC</option>
                                 </select>
                                 <button type="submit" className="border-4 rounded-full border-green-700 my-14 w-16 h-16 mx-auto">
-                                    {paginaAtivaCalculadora === "calculos" ? (
-                                        <ChevronLeftIcon className="size-18 text-green-700 " />
-                                    ) : (
-                                        <ChevronRightIcon className="size-18 text-green-700" />
-                                    )}
+                                    {paginaAtivaCalculadora === "calculos" ? <ChevronLeftIcon className="size-18 text-green-700 " /> : <ChevronRightIcon className="size-18 text-green-700" />}
                                 </button>
                             </form>
                         </div>
@@ -256,31 +249,19 @@ export default function Home() {
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
                                             {resultadosCalculo.valorPagoCincoAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoCincoAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.parcelaCincoAnosAtras > valorPrimeiraParcela ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaCincoAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.saldoDevedorCincoAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorCincoAnosAtras)}</span>
                                             )}
                                         </div>
                                     </div>
@@ -296,31 +277,19 @@ export default function Home() {
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
                                             {resultadosCalculo.valorPagoDezAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoDezAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.parcelaDezAnosAtras > valorPrimeiraParcela ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaDezAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.saldoDevedorDezAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorDezAnosAtras)}</span>
                                             )}
                                         </div>
                                     </div>
@@ -336,31 +305,19 @@ export default function Home() {
                                         </div>
                                         <div className="flex flex-col text-right  justify-between basis-2/4">
                                             {resultadosCalculo.valorPagoQuinzeAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.valorPagoQuinzeAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.parcelaQuinzeAnosAtras > valorPrimeiraParcela ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.parcelaQuinzeAnosAtras)}</span>
                                             )}
                                             {resultadosCalculo.saldoDevedorQuinzeAnosAtras > resultadosCalculo.valorFinanciado ? (
-                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-red-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}</span>
                                             ) : (
-                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">
-                                                    {formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}
-                                                </span>
+                                                <span className="text-green-500 my-2 h-10 text-base font-semibold">{formatarFloatParaReal(resultadosCalculo.saldoDevedorQuinzeAnosAtras)}</span>
                                             )}
                                         </div>
                                     </div>
@@ -372,6 +329,13 @@ export default function Home() {
                         </div>
                     )}
                 </div>
+            </div>
+        );
+    }
+    if (paginaAtiva === "aguardando") {
+        screen = (
+            <div className="p-5 bg-[url('/mar.jpg')] bg-cover bg-center h-dvh flex justify-center items-center">
+                <TailSpin />
             </div>
         );
     }
