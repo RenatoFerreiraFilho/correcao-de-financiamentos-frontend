@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import InputMask from "react-input-mask";
 import { TailSpin } from "react-loading-icons";
 
-export default function Home() {
+export default function App() {
     var screen;
     const [paginaAtiva, setPaginaAtiva] = useState("home"); //home ou calculadora ou aguardando
     const [paginaAtivaCalculadora, setPaginaAtivaCalculadora] = useState("inputs"); //inputs ou calculos
